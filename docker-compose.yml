@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  nextjs-app:
+    # Сборка контейнера с помощью Dockerfile в текущей директории
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Открываем порт 3000 для доступа к приложению
+    ports:
+      - "7000:7000"
+
+    # Чтобы сохранить состояние при перезапуске контейнера
+    volumes:
+      - .:/app
+
+    # Включаем режим разработки для удобства (опционально)
+    environment:
+      - NODE_ENV=development
+
+    # Перезапускать контейнер при сбое
+    restart: always
