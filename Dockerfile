@@ -6,17 +6,12 @@ WORKDIR /app
 
 # Копируем package.json и package-lock.json (или yarn.lock), чтобы установить зависимости
 COPY package*.json ./
-COPY yarn.lock ./
-
 # Устанавливаем зависимости
-RUN  npm install -g yarn && yarn install
-
-
+RUN npm install
 # Копируем все файлы приложения в контейнер
 COPY . .
-
 # Собираем приложение для продакшн
-RUN yarn build
+RUN npm run build
 
 # Используем минимальный образ для продакшн
 FROM node:20.10.0-alpine
@@ -28,15 +23,12 @@ WORKDIR /app
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/yarn.lock ./
-
 
 # Устанавливаем только production зависимости
-RUN  npm install -g yarn && yarn install --production
-
+RUN npm install --production
 # Проверка PATH
-    RUN echo $PATH
-    # Проверка содержимого node_modules/.bin
-    RUN ls -la node_modules/.bin
+RUN echo $PATH
+# Проверка содержимого node_modules/.bin
+RUN ls -la node_modules/.bin
 # Запускаем приложение
 CMD ["./node_modules/.bin/next", "start"]
