@@ -1,32 +1,34 @@
- # Используем официальный образ Node.js как базовый
- FROM node:20.10.0-alpine AS builder
+# Используем официальный образ Node.js как базовый
+FROM node:20.10.0-alpine AS builder
 
- # Устанавливаем рабочую директорию
- WORKDIR /app
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
- # Копируем package.json и package-lock.json (или yarn.lock), чтобы установить зависимости
- COPY package*.json ./
+# Копируем package.json и package-lock.json (или yarn.lock), чтобы установить зависимости
+COPY package*.json ./
 
- # Устанавливаем зависимости
- RUN npm install
+# Устанавливаем зависимости
+RUN npm install
 
- # Копируем все файлы приложения в контейнер
- COPY . .
+# Копируем все файлы приложения в контейнер
+COPY . .
 
- # Собираем приложение для продакшн
- RUN npm run build
+# Собираем приложение для продакшн
+RUN npm run build
 
- # Используем минимальный образ для продакшн
- FROM node:20.10.0-alpine
+# Используем минимальный образ для продакшн
+FROM node:20.10.0-alpine
 
- # Устанавливаем рабочую директорию
- WORKDIR /app
+# Устанавливаем рабочую директорию
+WORKDIR /app
 
- # Копируем только необходимые файлы из builder-образа
- COPY --from=builder /app/package*.json ./
- COPY --from=builder /app/node_modules ./node_modules
- COPY --from=builder /app/.next ./.next
- COPY --from=builder /app/public ./public
+# Копируем только необходимые файлы из builder-образа
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
 
- # Запускаем приложение
- CMD ["npm", "start"]
+# Устанавливаем только production зависимости
+RUN npm install --production
+
+# Запускаем приложение
+CMD ["npm", "start"]
