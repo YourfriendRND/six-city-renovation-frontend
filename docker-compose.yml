@@ -7,10 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:${PORT}"
+      - "7000:${PORT}"
     environment:
        - NODE_ENV=production
     restart: always
-    # command: yarn start
 
 # docker compose -f docker-compose.dev.yml up --build
