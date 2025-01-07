@@ -1,23 +1,16 @@
-version: '3.9'
+version: "3.8"
 
 services:
-  nextjs-app:
-    # Сборка контейнера с помощью Dockerfile в текущей директории
+  six-city-renovation-frontend:
+    container_name: six-city-renovation-frontend
     build:
       context: .
       dockerfile: Dockerfile
-
-    # Открываем порт 3000 для доступа к приложению
     ports:
-      - "7000:7000"
-
-    # Чтобы сохранить состояние при перезапуске контейнера
-    volumes:
-      - .:/app
-
-    # Включаем режим разработки для удобства (опционально)
+      - "3000:${PORT}"
     environment:
-      - NODE_ENV=development
-
-    # Перезапускать контейнер при сбое
+       - NODE_ENV=production
     restart: always
+    # command: yarn start
+
+# docker compose -f docker-compose.dev.yml up --build
