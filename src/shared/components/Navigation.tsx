@@ -1,5 +1,4 @@
 import { JSX } from 'react';
-import { User } from '@/shared/types/user.type';
 
 type NavigationProps = {
     email?: string;
