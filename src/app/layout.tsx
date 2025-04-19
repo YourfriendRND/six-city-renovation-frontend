@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { StoreProvider } from "./StoreProvider";
 
 export const metadata: Metadata = {
   title: "6 cities",
@@ -12,10 +13,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="eng">
       <body>
-        {children}
+        <StoreProvider>
+          {children}
+        </StoreProvider>;  
       </body>
-    </html>
-  );
+    </html> 
+  )
 }

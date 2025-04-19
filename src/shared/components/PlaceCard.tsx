@@ -30,6 +30,7 @@ export function PlaceCard({imgSrc, price, rating, name, type, isPremium}: PlaceC
                 width={260}
                 height={200}
                 alt="Place image"
+                unoptimized
                 />
             </a>
         </div>
