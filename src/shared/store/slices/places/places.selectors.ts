@@ -1,4 +1,3 @@
-import { createSlice } from '@reduxjs/toolkit';
 import { ShortPlace } from '@/shared/types';
 import { State } from '../../store';
 import { Cities, StoreNamespace } from '@/shared/constants';
