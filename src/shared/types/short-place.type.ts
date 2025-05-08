@@ -1,5 +1,5 @@
-import { Cities } from '../constants';
 import { Preview } from './preview.type';
+import { City } from './city.type';
 
 export type ShortPlaceWrapper = {
     places: ShortPlace[];
@@ -13,7 +13,7 @@ export type ShortPlace = {
     price: number;
     type: string;
     rating?: number; // TODO: После подключения API комментариев
-    city: Cities;
+    city: Pick<City, 'name'>
     latitude: number;
     longitude: number;
     preview: Preview;
