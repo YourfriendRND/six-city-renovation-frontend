@@ -32,14 +32,15 @@ export const placesSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchPlaces.fulfilled, (state, action) => {
-            state.places = action.payload.places;
-            state.total = action.payload.total;
-        }),
-        builder.addCase(fetchCities.fulfilled, (state, action) => {
-            state.cities = action.payload;
-            state.activeCity = action.payload[0];
-        })
+        builder
+            .addCase(fetchPlaces.fulfilled, (state, action) => {
+                state.places = action.payload.places;
+                state.total = action.payload.total;
+            })
+            .addCase(fetchCities.fulfilled, (state, action) => {
+                state.cities = action.payload;
+                state.activeCity = action.payload[0];
+            });
     },
 });
 

@@ -16,7 +16,9 @@ type CustomMarkerProps = {
 }
 
 export function CustomMarker ({ place }: CustomMarkerProps): React.JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const L = require("leaflet");
+
     const icon = L.icon({
         iconUrl: '/img/pin.svg',
         iconSize: [20, 30],
@@ -41,7 +43,7 @@ export function CustomMarker ({ place }: CustomMarkerProps): React.JSX.Element {
                 duration: 0.7
             })
         }
-    }, [isAciveCard])
+    }, [isAciveCard, map, place.latitude, place.longitude])
 
     return (<>
         <Marker position={[place.latitude, place.longitude]} icon={isAciveCard ? activeIcon : icon} >

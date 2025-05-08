@@ -30,7 +30,7 @@ export default function Home() {
     if (activeCity?.id) {
       dispatch(fetchPlaces(activeCity?.id))
     }
-  }, [activeCity]);
+  }, [activeCity, cities.length, dispatch]);
 
   if (activeCity) {
     return (
