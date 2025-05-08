@@ -5,9 +5,6 @@ import 'leaflet/dist/leaflet.css';
 import { ShortPlace } from '../types';
 import { City } from '../types';
 import { CustomMarker } from './CustomMarker';
-import { useAppSelector } from '../store';
-import { getActivePlaceCard } from '../store/slices/places/places.selectors';
-import { LatLngExpression } from 'leaflet';
 
 const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
