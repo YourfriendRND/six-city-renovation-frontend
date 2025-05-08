@@ -3,18 +3,28 @@ import Image from 'next/image';
 import { JSX } from 'react';
 
 import { calculateRating } from '../utils';
+import { useAppDispatch } from '../store';
+import { setActivePlaceCardId } from '../store/slices/places';
+import { ShortPlace } from '../types';
 
 type PlaceCardProps = {
-    imgSrc: string;
-    price: number;
-    rating: number;
-    name: string;
-    type: string;
-    isPremium: boolean;
+    place: ShortPlace
 }
 
-export function PlaceCard({imgSrc, price, rating, name, type, isPremium}: PlaceCardProps): JSX.Element {
-    return  <article className="cities__card place-card">
+export function PlaceCard({ place }: PlaceCardProps): JSX.Element {
+    const { preview, price, rating, name, type, isPremium} = place;
+    
+    const dispatch = useAppDispatch();
+    
+    const handleMouseEnterEvent = (): void => {
+        dispatch(setActivePlaceCardId(place));
+    }
+
+    const handleMouseLeaveEvent = (): void => {
+        dispatch(setActivePlaceCardId(null));
+    }
+
+    return  <article className="cities__card place-card" onMouseEnter={handleMouseEnterEvent} onMouseLeave={handleMouseLeaveEvent}>
         {
         isPremium 
             ? <div className="place-card__mark">
@@ -26,7 +36,7 @@ export function PlaceCard({imgSrc, price, rating, name, type, isPremium}: PlaceC
             <a href="#">
                 <Image
                 className="place-card__image"
-                src={imgSrc}
+                src={preview.url}
                 width={260}
                 height={200}
                 alt="Place image"
@@ -49,7 +59,7 @@ export function PlaceCard({imgSrc, price, rating, name, type, isPremium}: PlaceC
             </div>
             <div className="place-card__rating rating">
                 <div className="place-card__stars rating__stars">
-                    <span style={{width: calculateRating(rating)}}></span>
+                    <span style={{width: calculateRating(rating || 0)}}></span>
                     <span className="visually-hidden">Rating</span>
                 </div>
             </div>

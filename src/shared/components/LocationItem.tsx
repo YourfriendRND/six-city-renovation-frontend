@@ -1,22 +1,25 @@
 import { JSX } from 'react';
-import { Cities } from '../constants';
+
 import { setActiveCity } from '@/shared/store/slices/places';
 import { getActiveCity } from '../store/slices/places/places.selectors';
 import { useAppSelector, useAppDispatch } from '../store';
+import { City } from '../types';
 
 type LocationItemProps = {
-  name: Cities;
+  city: City;
 }
 
-export function LocationItem({ name }: LocationItemProps): JSX.Element {
+export function LocationItem({ city }: LocationItemProps): JSX.Element {
+  const { id, name } = city;
+  
   const dispatch = useAppDispatch();
   const activeCity = useAppSelector(getActiveCity);
   
-  const isActive = name === activeCity;
+  const isActive = id === activeCity?.id;
   
   return <li className="locations__item">
     <a className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`} href="#" onClick={() => {
-      dispatch(setActiveCity(name));
+      dispatch(setActiveCity(city));
     }}>
       <span>{name}</span>
     </a>
