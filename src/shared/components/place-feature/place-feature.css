@@ -1,0 +1,19 @@
+.property__inside-item {
+    position: relative;
+    width: 100%;
+    max-width: 174px;
+    padding-left: 18px;
+    font-size: 16px;
+    line-height: 1.75;
+    color: #000 
+}
+    
+.property__inside-item::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 0;
+    width: 12px;
+    height: 1px;
+    background-color: #000 
+}

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ShortPlace, City } from '@/shared/types';
-import { fetchPlaces, fetchCities } from '../../async-actions/places/places-async-actions';
+import { ShortPlace, City, Place } from '@/shared/types';
+import { fetchPlaces, fetchCities, fetchPlaceDetails } from '../../async-actions/places/places-async-actions';
 import { StoreNamespace } from '@/shared/constants';
 
 export type PlacesState = {
@@ -10,6 +10,7 @@ export type PlacesState = {
     total: number;
     activeCity: City | null;
     activePlaceCard: ShortPlace | null;
+    place: Place | null;
 };
 
 export const initialState: PlacesState = {
@@ -18,6 +19,7 @@ export const initialState: PlacesState = {
     total: 0,
     activeCity: null,
     activePlaceCard: null,
+    place: null,
 };
 
 export const placesSlice = createSlice({
@@ -27,8 +29,11 @@ export const placesSlice = createSlice({
         setActiveCity: (state: PlacesState, action: PayloadAction<City>): void => {
             state.activeCity = action.payload;
         },
-        setActivePlaceCardId: (state: PlacesState, action: PayloadAction<ShortPlace | null>): void => {
+        setActivePlaceCard: (state: PlacesState, action: PayloadAction<ShortPlace | null>): void => {
             state.activePlaceCard = action.payload;
+        },
+        setPlaceAsNull: (state: PlacesState): void => {
+            state.place = null;
         }
     },
     extraReducers: (builder) => {
@@ -40,12 +45,15 @@ export const placesSlice = createSlice({
             .addCase(fetchCities.fulfilled, (state, action) => {
                 state.cities = action.payload;
                 state.activeCity = action.payload[0];
+            })
+            .addCase(fetchPlaceDetails.fulfilled, (state, action) => {
+                state.place = action.payload;
             });
     },
 });
 
 const { actions, reducer } = placesSlice;
 
-export const { setActiveCity, setActivePlaceCardId } = actions;
+export const { setActiveCity, setActivePlaceCard, setPlaceAsNull } = actions;
 
 export default reducer;

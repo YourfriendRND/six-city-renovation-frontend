@@ -4,4 +4,5 @@ export type User = {
     email: string;
     avatarUrl: string;
     favoriteCount: number;
+    isPro: boolean;
 }

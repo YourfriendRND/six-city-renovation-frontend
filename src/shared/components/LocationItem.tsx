@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { JSX } from 'react';
 
 import { setActiveCity } from '@/shared/store/slices/places';
@@ -18,10 +19,14 @@ export function LocationItem({ city }: LocationItemProps): JSX.Element {
   const isActive = id === activeCity?.id;
   
   return <li className="locations__item">
-    <a className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`} href="#" onClick={() => {
-      dispatch(setActiveCity(city));
-    }}>
+    <Link 
+      className={`locations__item-link tabs__item ${isActive ? 'tabs__item--active' : ''}`}
+      href={'/'}
+      onClick={() => {
+        dispatch(setActiveCity(city));
+      }}
+    >
       <span>{name}</span>
-    </a>
+    </Link>
   </li>
 }
