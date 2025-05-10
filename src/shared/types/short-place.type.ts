@@ -1,20 +1,8 @@
-import { Preview } from './preview.type';
-import { City } from './city.type';
+import { Place } from './place.type';
+
+export type ShortPlace = Omit<Place, 'description' | 'bedrooms' | 'adultsCount' | 'features' | 'host' | 'images'>;
 
 export type ShortPlaceWrapper = {
     places: ShortPlace[];
     total: number;
-}
-
-export type ShortPlace = {
-    id: string;
-    name: string;
-    isPremium: boolean;
-    price: number;
-    type: string;
-    rating?: number; // TODO: После подключения API комментариев
-    city: Pick<City, 'name'>
-    latitude: number;
-    longitude: number;
-    preview: Preview;
 }

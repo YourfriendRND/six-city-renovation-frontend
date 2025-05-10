@@ -1,10 +1,8 @@
 'use client'
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
-import { PlaceCard, LocationItem, Navigation, Sorting } from '@/shared/components';
-import { User } from '@/shared/types/user.type';
+import { ShortPlaceCard, LocationItem, Sorting, Header } from '@/shared/components';
 import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { getPlaces, getActiveCity, getCities } from '@/shared/store/slices/places/places.selectors';
 import { fetchCities, fetchPlaces } from '@/shared/store/async-actions';
@@ -16,8 +14,6 @@ export default function Home() {
   const dispatch: AppDispatch = useAppDispatch();
   
   const cities = useAppSelector(getCities);
-
-  const [user] = useState<User | null>(null); // Проверка на авторизацию
 
   const places = useAppSelector(getPlaces);
   const activeCity = useAppSelector(getActiveCity);
@@ -46,24 +42,9 @@ export default function Home() {
            <path fillRule="evenodd" clipRule="evenodd" d="M6.5 9.644L10.517 12 9.451 7.56 13 4.573l-4.674-.386L6.5 0 4.673 4.187 0 4.573 3.549 7.56 2.483 12 6.5 9.644z"></path>
          </symbol>
        </svg>
-     </div><div className="page page--gray page--main">
-         <header className="header">
-           <div className="container">
-             <div className="header__wrapper">
-               <div className="header__left">
-                 <a className="header__logo-link header__logo-link--active">
-                   <Image
-                     src="img/logo.svg"
-                     className="header__logo"
-                     alt="6 cities logo"
-                     width={81}
-                     height={41} />
-                 </a>
-               </div>
-               <Navigation email={user?.email} favoriteCount={user?.favoriteCount} isAuth={Boolean(user)} />
-             </div>
-           </div>
-         </header>
+     </div>
+     <div className="page page--gray page--main">
+         <Header />
          <main className="page__main page__main--index">
            <h1 className="visually-hidden">Cities</h1>
            <div className="tabs">
@@ -83,7 +64,7 @@ export default function Home() {
                  <Sorting />
                  <div className="cities__places-list places__list tabs__content">
                    {places.map((place) => (
-                      <PlaceCard key={place.id} place={place} />
+                      <ShortPlaceCard key={place.id} place={place} />
                    ))}
                  </div>
                </section>

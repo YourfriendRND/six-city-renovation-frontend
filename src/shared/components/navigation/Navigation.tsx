@@ -1,5 +1,7 @@
 import { JSX } from 'react';
 
+import './navigation.css';
+
 type NavigationProps = {
     email?: string;
     favoriteCount?: number;
