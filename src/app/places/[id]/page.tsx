@@ -25,7 +25,7 @@ export default function Page({params}: PageParams): React.JSX.Element {
                 </symbol>
             </svg>
         </div>
-        <Header />
+        <Header isAuthPage={false} />
         <Place id={id} />
     </>
     
