@@ -7,3 +7,4 @@ export * from './Place';
 export * from './header/Header';
 export * from './place-img/Place-img';
 export * from './place-feature/Place-Feature';
+export * from './sign-up/SignUp';

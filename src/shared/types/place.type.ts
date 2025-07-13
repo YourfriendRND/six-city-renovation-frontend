@@ -1,6 +1,6 @@
 import { Preview } from './preview.type';
 import { City } from './city.type';
-import { User } from './user.type';
+import { User } from './users/user.type';
 
 export type Place = {
     id: string;
