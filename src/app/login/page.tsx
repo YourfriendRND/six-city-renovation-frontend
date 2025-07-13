@@ -1,5 +1,7 @@
 'use client';
+import './login-page.css'
 import { useEffect } from 'react';
+import Link from 'next/link';
 
 import { Header } from '@/shared/components';
 import { useAppDispatch, useAppSelector, AppDispatch } from '@/shared/store';
@@ -31,7 +33,7 @@ export default function LoginPage(): React.JSX.Element {
                 <main className="page__main page__main--login">
                     <div className="page__login-container container">
                         <section className="login">
-                            <h1 className="login__title">Sign in</h1>
+                            <h1 className="login__title">Sign In</h1>
                             <form className="login__form form" action="#" method="post">
                             <div className="login__input-wrapper form__input-wrapper">
                                 <label className="visually-hidden">E-mail</label>
@@ -41,8 +43,12 @@ export default function LoginPage(): React.JSX.Element {
                                 <label className="visually-hidden">Password</label>
                                 <input className="login__input form__input" type="password" name="password" placeholder="Password" required />
                             </div>
-                            <button className="login__submit form__submit button" type="submit">Sign in</button>
+                            <button className="login__submit form__submit button" type="submit">Sign In</button>
                             </form>
+                            <div className="login__register">
+                                <span>Don&apos;t have an account? </span>
+                                <Link href="/register" className="login__register-link">Sign Up</Link>
+                            </div>
                         </section>
                         <section className="locations locations--login locations--current">
                             <div className="locations__item">

@@ -6,8 +6,7 @@ const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: TIME_OUT,
     headers: {
-      'Content-Type': 'Application/json',
-      'Content-Encoding': 'utf-8',
+      'Content-Type': 'application/json',
     },
     withCredentials: true,
 });
