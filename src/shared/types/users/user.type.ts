@@ -2,7 +2,8 @@ export type User = {
     id: string;
     name: string;
     email: string;
-    avatarUrl: string;
-    favoriteCount: number;
+    avatarUrl: string | null;
     isPro: boolean;
+    lastLoginAt: Date | null;
+    favoriteCount?: number;
 }

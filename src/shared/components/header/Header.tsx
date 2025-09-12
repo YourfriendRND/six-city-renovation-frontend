@@ -28,7 +28,7 @@ export function Header({ user, isAuthPage }: HeaderProps): React.JSX.Element {
                                 height={41} />
                         </Link>
                     </div>
-                    {isAuthPage ? <></> : <Navigation email={user?.email} favoriteCount={user?.favoriteCount} isAuth={Boolean(user)} /> }
+                    {isAuthPage ? <></> : <Navigation favoriteCount={user?.favoriteCount} /> }
                 </div>
             </div>
         </header>
