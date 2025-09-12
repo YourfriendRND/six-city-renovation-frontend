@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { HttpStatusCode } from 'axios';
 
 const TIME_OUT = 10000;
 
@@ -17,8 +18,11 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response?.status === HttpStatusCode.Unauthorized) {
+      return Promise.reject(new Error(error.response?.data?.message || 'Unauthorized'));
+    }
     // Обработка ошибок ответа
-    console.error('Axios error:', error);
+    console.error('Unhandle axios error:', error);
     return Promise.reject(error);
   }
 );

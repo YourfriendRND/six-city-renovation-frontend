@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from '@/shared/store';
 import { getPlaces, getActiveCity, getCities } from '@/shared/store/slices/places/places.selectors';
 import { fetchCities, fetchPlaces } from '@/shared/store/async-actions';
 import { AppDispatch } from '@/shared/store';
+import { getCurrentUser, getIsAuthorized } from '@/shared/store/slices/auth/auth.selectors';
+import { whoAmI } from '@/shared/store/async-actions/auth/auth-async-actions';
 
 const Map = dynamic(() => import('../shared/components/Map').then(mod => mod.Map), { ssr: false });
 
@@ -17,8 +19,14 @@ export default function Home() {
 
   const places = useAppSelector(getPlaces);
   const activeCity = useAppSelector(getActiveCity);
+  const currentUser = useAppSelector(getCurrentUser);
+  const isAuthorized = useAppSelector(getIsAuthorized);
 
   useEffect(() => {
+    if (!currentUser && !isAuthorized) {
+      dispatch(whoAmI());
+    }
+
     if (!cities.length) {
       dispatch(fetchCities()); 
     }
@@ -26,7 +34,7 @@ export default function Home() {
     if (activeCity?.id) {
       dispatch(fetchPlaces(activeCity?.id))
     }
-  }, [activeCity, cities.length, dispatch]);
+  }, [activeCity, cities.length, dispatch, currentUser, isAuthorized]);
 
   if (activeCity) {
     return (

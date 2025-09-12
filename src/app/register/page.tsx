@@ -9,8 +9,10 @@ import { useAppDispatch, useAppSelector, AppDispatch } from '@/shared/store';
 import { getCities } from '@/shared/store/slices/places/places.selectors';
 import { fetchCities } from '@/shared/store/async-actions';
 import { findRandomListItem } from '@/shared/utils';
-import { getIsSignUp } from '@/shared/store/slices/auth/auth.selectors';
+import { getIsAuthorized, getIsSignUp } from '@/shared/store/slices/auth/auth.selectors';
 import { unsetIsSignUp } from '@/shared/store/slices/auth';
+import { getCurrentUser } from '@/shared/store/slices/auth/auth.selectors';
+import { whoAmI } from '@/shared/store/async-actions/auth/auth-async-actions';
 
 export default function RegisterPage(): React.JSX.Element {
     const dispatch: AppDispatch = useAppDispatch();
@@ -18,6 +20,18 @@ export default function RegisterPage(): React.JSX.Element {
     
     const cities = useAppSelector(getCities);
     const isSignUp = useAppSelector(getIsSignUp);
+    const user = useAppSelector(getCurrentUser);
+    const isAuthorized = useAppSelector(getIsAuthorized);
+
+    useEffect(() => {
+        if (!user && !isAuthorized) {
+            dispatch(whoAmI());
+        }
+        
+        if (user) {
+            router.push('/');
+        }
+    }, [router, user, isAuthorized, dispatch])
 
     useEffect(() => {
         if (!cities.length) {
@@ -36,7 +50,7 @@ export default function RegisterPage(): React.JSX.Element {
     const randomCity = findRandomListItem(cities);
     const previewCityUrl = randomCity ? `${process.env.NEXT_PUBLIC_API_URL}/files/${randomCity?.preview?.id}` : '';
 
-    if (randomCity) {
+    if (randomCity && !isAuthorized) {
         return (
             <div className="page page--gray page--register" style={{ '--city-image': `url(${previewCityUrl})` } as React.CSSProperties} >
                 <Header isAuthPage={true} />
@@ -55,6 +69,8 @@ export default function RegisterPage(): React.JSX.Element {
                 </main>            
             </div>
         )
+    } else {
+        return <>Redirect...</>
     }
 
     return <>заглушка</>

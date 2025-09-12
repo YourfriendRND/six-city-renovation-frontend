@@ -100,8 +100,8 @@ export function SignUp(): JSX.Element {
         }, 300);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (evt: React.FormEvent): Promise<void> => {
+        evt.preventDefault();
         
         if (!validateForm()) {
             return;
