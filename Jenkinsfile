@@ -1,15 +1,11 @@
 pipeline{
-    agent {
-        docker {
-            image 'node:20.17.0-alpine'
-            args '-u root:root'
-        }
-    }
+    agent none 
     triggers {
         githubPush()
     }
     stages {
         stage('Checkout') {
+            agent any
             steps {
                 git branch: 'dev',
                 url: 'https://github.com/YourfriendRND/six-city-renovation-frontend'
@@ -17,6 +13,12 @@ pipeline{
         }
 
         stage('Build') {
+            agent {
+                docker {
+                    image 'node:20.17.0-alpine'
+                    args '-u root:root'
+                }
+            }
             steps {
                 cache(maxCacheSize: 250, caches: [
                     arbitraryFileCache(
@@ -34,6 +36,7 @@ pipeline{
         }
 
         stage('Deploy') {
+            agent any
             steps {
                 script {
                     def dockerComposeFile = 'docker-compose.yml'
