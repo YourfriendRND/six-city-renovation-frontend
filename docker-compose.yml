@@ -11,5 +11,3 @@ services:
     environment:
        - NODE_ENV=production
     restart: always
-
-# docker compose -f docker-compose.dev.yml up --build
