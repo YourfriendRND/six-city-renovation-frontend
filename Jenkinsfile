@@ -15,7 +15,7 @@ pipeline{
 
         stage('Build') {
             steps {
-                cache(MaxCacheSize: 250, caches: [
+                cache(maxCacheSize: 250, caches: [
                     arbitraryFileCache(
                         path: "node_modules",
                         includes: "**/*",
