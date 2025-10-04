@@ -1,7 +1,5 @@
 pipeline{
-    agent {
-        docker { image 'node:20.17.0-alpine ' }
-    }
+    agent any
     triggers {
         githubPush()
     }
