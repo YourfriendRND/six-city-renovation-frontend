@@ -21,12 +21,12 @@ pipeline{
                         includes: "**/*",
                         cacheValidityDecidingFile: "package-lock.json"
                     )
-                ])
-            } {
-                sh '''
-                    npm install
-                    npm run build
-                '''
+                ]) {
+                    sh '''
+                        npm install
+                        npm run build
+                    '''
+                }
             }
         }
 
