@@ -35,7 +35,9 @@
 .login__form {
   position: relative;
   z-index: 1;
-  width: 341px 
+  width: 341px;
+  margin: 0;
+  padding: 0;
 }
 
 .login__input-wrapper {
@@ -44,16 +46,12 @@
 
 .login__input {
   width: 100%;
-  margin-bottom: 24px 
-}
-
-.login__input {
-  width: 100%;
-  margin-bottom: 24px 
+  margin-bottom: 16px 
 }
     
 .login__submit {
-  width: 100% 
+  width: 100%;
+  margin-top: 8px;
 }
 
 .login__register {
@@ -71,19 +69,56 @@
   text-decoration: underline;
 }
 
-
 .login__error {
   color: #ff0000;
-  margin-bottom: 15px;
-  padding: 10px;
+  margin-bottom: 12px;
+  padding: 8px 12px;
   background-color: #ffeeee;
   border: 1px solid #ffcccc;
   border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .login__error-message {
   color: #ff0000;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 2px; 
+  margin-bottom: 8px;
   display: block;
+}
+
+.form--error {
+  border: 2px solid #ff3860;
+  border-radius: 4px;
+  padding: 8px 12px;
+  background-color: #fff5f5;
+}
+
+.form--error .login__input {
+  border-color: #ff3860;
+  background-color: #fff5f5;
+}
+
+.form--shaking {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { 
+    transform: translateX(0); 
+  }
+  10%, 30%, 50%, 70%, 90% { 
+    transform: translateX(-5px); 
+  }
+  20%, 40%, 60%, 80% { 
+    transform: translateX(5px); 
+  }
+}
+
+.login__input:invalid {
+  box-shadow: none;
+  outline: none;
 }

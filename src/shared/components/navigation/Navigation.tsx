@@ -3,15 +3,22 @@ import Link from 'next/link';
 
 import './navigation.css';
 import { getCurrentUser, getIsAuthorized } from '@/shared/store/slices/auth/auth.selectors';
-import { useAppSelector } from '@/shared/store';
+import { useAppSelector, useAppDispatch } from '@/shared/store';
+import { logout } from '@/shared/store/async-actions/auth/auth-async-actions';
 
 type NavigationProps = {
     favoriteCount?: number;
 }
 
 export function Navigation({ favoriteCount }: NavigationProps): JSX.Element {
+    const dispatch = useAppDispatch();
     const user = useAppSelector(getCurrentUser);
     const isAuth = useAppSelector(getIsAuthorized);
+
+    const handleLogout = async (evt: React.SyntheticEvent): Promise<void> => {
+        evt.preventDefault();
+        await dispatch(logout());
+    }
 
     return <nav className="header__nav">
         <ul className="header__nav-list">
@@ -24,7 +31,7 @@ export function Navigation({ favoriteCount }: NavigationProps): JSX.Element {
                 </a>
             </li>}
             {isAuth && <li className="header__nav-item">
-                <a className="header__nav-link" href="#">
+                <a className="header__nav-link" href="#" onClick={handleLogout}>
                     <span className="header__signout">Sign out</span>
                 </a>
             </li>}

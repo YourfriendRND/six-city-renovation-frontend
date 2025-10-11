@@ -5,4 +5,5 @@ export enum AsyncActions {
     createUser = 'auth/createUser',
     loginUser = 'auth/loginUser',
     whoAmI = 'auth/whoAmI',
+    logout = 'auth/logout',
 }

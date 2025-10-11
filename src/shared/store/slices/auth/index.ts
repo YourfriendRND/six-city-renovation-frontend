@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { User } from '@/shared/types';
 import { StoreNamespace } from '@/shared/constants';
-import { createUser, loginUser } from '../../async-actions/auth/auth-async-actions';
+import { createUser, loginUser, logout } from '../../async-actions/auth/auth-async-actions';
 import { whoAmI } from '../../async-actions/auth/auth-async-actions';
 
 export type AuthState = {
@@ -48,6 +48,10 @@ export const authSlice = createSlice({
                 state.isAuthorized = true;
             })
             .addCase(whoAmI.rejected, (state) => {
+                state.isAuthorized = false;
+                state.currentUser = null;
+            })
+            .addCase(logout.fulfilled, (state) => {
                 state.isAuthorized = false;
                 state.currentUser = null;
             })

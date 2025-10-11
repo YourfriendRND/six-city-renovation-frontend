@@ -2,7 +2,7 @@
 import './sign-in.css';
 import Link from 'next/link';
 import React from 'react';
-import { JSX, useState } from 'react';
+import { JSX, useState, useRef, useEffect } from 'react';
 import { validateEmail, validatePassword } from '@/shared/utils';
 import { AuthUserDto } from '@/shared/types';
 import { useAppDispatch } from '@/shared/store';
@@ -22,6 +22,30 @@ export function SignIn(): JSX.Element {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<AuthFormErrors>({});
+    const [isShaking, setIsShaking] = useState<boolean>(false);
+    
+    const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+        
+    useEffect(() => {
+        return () => {
+            if (shakeTimeoutRef.current) {
+                clearTimeout(shakeTimeoutRef.current);
+            }
+        };
+    }, []);
+    
+    const triggerShake = (): void => {
+        setIsShaking(true);
+
+        if (shakeTimeoutRef.current) {
+            clearTimeout(shakeTimeoutRef.current);
+        }
+
+        shakeTimeoutRef.current = setTimeout(() => {
+            setIsShaking(false);
+            shakeTimeoutRef.current = null;
+        }, 500);
+    }
 
     const validateForm = (): boolean => {
         const errors = {
@@ -47,6 +71,12 @@ export function SignIn(): JSX.Element {
             setErrors((prev) => ({
                 ...prev,
                 [name]: undefined,
+                general: undefined,
+            }))
+        } else if (errors.general) {
+            setErrors(prev => ({
+                ...prev,
+                general: undefined,
             }))
         }
     }
@@ -64,13 +94,23 @@ export function SignIn(): JSX.Element {
         setErrors(prev => ({...prev, general: null}))
 
         try {
-            await dispatch(loginUser(formData));
-            await dispatch(whoAmI());
+            const result = await dispatch(loginUser(formData));
+            
+            if (loginUser.rejected.match(result)) {
+                const message = String(result.payload);
+
+                setErrors((prev) => ({...prev, general: message }));
+                triggerShake();
+            } else {
+                await dispatch(whoAmI());
+            }
+
         } finally {
             setIsSubmitting(false);
         }
     } 
 
+    const formClassName = `login__form form ${errors.general || Object.values(errors).some(error => error) ? 'form--error' : ''} ${isShaking ? 'form--shaking' : ''}`;
 
     return <section className="login">
         {
@@ -81,7 +121,7 @@ export function SignIn(): JSX.Element {
             )
         }
         <h1 className="login__title">Sign In</h1>
-        <form className="login__form form" action="#" method="post" onSubmit={handleSubmit}>
+        <form className={formClassName} action="#" method="post" onSubmit={handleSubmit} noValidate>
             <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input 
