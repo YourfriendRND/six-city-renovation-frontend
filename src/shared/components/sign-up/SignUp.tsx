@@ -1,6 +1,6 @@
 'use client';
 import './sign-up.css'
-import { JSX, useState } from 'react';
+import { JSX, useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 import { useAppDispatch } from '@/shared/store';
@@ -33,6 +33,31 @@ export function SignUp(): JSX.Element {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const [errors, setErrors] = useState<FormErrors>({});
+    
+    const [isShaking, setIsShaking] = useState<boolean>(false);
+
+    const shakeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    
+    useEffect(() => {
+        return () => {
+            if (shakeTimeoutRef.current) {
+                clearTimeout(shakeTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    const triggerShake = (): void => {
+        setIsShaking(true);
+
+        if (shakeTimeoutRef.current) {
+            clearTimeout(shakeTimeoutRef.current);
+        }
+
+        shakeTimeoutRef.current = setTimeout(() => {
+            setIsShaking(false);
+            shakeTimeoutRef.current = null;
+        }, 500);
+    }
 
      const validateForm = (): boolean => {
         const newErrors = {
@@ -44,39 +69,6 @@ export function SignUp(): JSX.Element {
 
         setErrors(newErrors);
         return !Object.values(newErrors).some(error => error !== undefined);
-    };
-
-     const handleFieldValidation = (name: string, value: string): void => {
-        let error: string | undefined;
-        
-        switch (name) {
-            case 'username':
-                error = validateUserName(value);
-                break;
-            case 'email':
-                error = validateEmail(value);
-                break;
-            case 'password':
-                error = validatePassword(value);
-                if (formData.repeatPassword) {
-                    setErrors(prev => ({
-                        ...prev,
-                        repeatPassword: validateRepeatedPassword(value, formData.repeatPassword)
-                    }));
-                }
-
-                break;
-            case 'repeatPassword':
-                error = validateRepeatedPassword(formData.password, value);
-                break;
-            default:
-                break;
-            }
-
-        setErrors(prev => ({
-            ...prev,
-            [name]: error
-        }));
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -91,13 +83,15 @@ export function SignUp(): JSX.Element {
         if (errors[name as keyof FormErrors]) {
             setErrors(prev => ({
                 ...prev,
-                [name]: undefined
+                [name]: undefined,
+                general: undefined
             }));
+        } else if (errors.general) {
+            setErrors(prev => ({
+                ...prev,
+                general: undefined,
+            }))
         }
-
-        setTimeout(() => {
-            handleFieldValidation(name, value);
-        }, 300);
     };
 
     const handleSubmit = async (evt: React.FormEvent): Promise<void> => {
@@ -111,12 +105,21 @@ export function SignUp(): JSX.Element {
         setErrors(prev => ({ ...prev, general: undefined }));
 
         try {
-            await dispatch(createUser(formData));
+            const result = await dispatch(createUser(formData));
+
+            if (createUser.rejected.match(result)) {
+                const message = String(result.payload);
+
+                setErrors((prev) => ({...prev, general: message }));
+                triggerShake();
+            }
         } finally {
             setIsSubmitting(false);
         }
     };
     
+    const formClassName = `register__form form ${errors.general || Object.values(errors).some(error => error) ? 'form--error' : ''} ${isShaking ? 'form--shaking' : ''}`;
+
     return <section className="register">
         <h1 className="register__title">Sign Up</h1>
         {
@@ -126,7 +129,7 @@ export function SignUp(): JSX.Element {
                 </div>
             )
         }
-        <form className="register__form form" onSubmit={handleSubmit}>
+        <form className={formClassName} onSubmit={handleSubmit} noValidate>
             <div className="register__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">Your name</label>
                 <input
